@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Map;
@@ -12,6 +13,15 @@ import java.util.Map;
  * Created by Kristian on 3/24/2016.
  */
 public class EasyHttp {
+
+    //TODO: find a way to not have to deal with malformed url exception
+    public static URL buildURL(String s){
+        try {
+            return new URL(s);
+        } catch (MalformedURLException e) {
+            return null;
+        }
+    }
 
     public static EasyHttpResponse doHttp(EasyHttpRequest request){
         String reqMethod = request.getRequestMethod();

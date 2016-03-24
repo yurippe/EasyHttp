@@ -118,4 +118,5 @@ public class EasyHttpRequest {
     public EasyHttpResponse doHTTP(){
         return EasyHttp.doHttp(this);
     }
+
 }
