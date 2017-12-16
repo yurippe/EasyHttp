@@ -1,9 +1,6 @@
 package dk.atomit.EasyHTTP;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.*;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,11 +26,15 @@ public class EasyHttp {
         }
     }
 
-    @Deprecated
     /**
      * This should NEVER be used in production.
      */
-    public static void allowInsecure() throws GeneralSecurityException{
+    @Deprecated
+    public static void allowInsecure() throws GeneralSecurityException {
+        allowInsecure(false);
+    }
+    @Deprecated
+    public static void allowInsecure(boolean allHostnamesValid) throws GeneralSecurityException{
         // Create a trust manager that does not validate certificate chains
         TrustManager[] trustAllCerts = new TrustManager[] {
                 new X509TrustManager() {
@@ -53,6 +54,17 @@ public class EasyHttp {
         SSLContext sc = SSLContext.getInstance("SSL");
         sc.init(null, trustAllCerts, new java.security.SecureRandom());
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+        if(allHostnamesValid) {
+            HostnameVerifier allHostsValid = new HostnameVerifier() {
+                @Override
+                public boolean verify(String s, SSLSession sslSession) {
+                    return true;
+                }
+            };
+
+            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+        }
     }
 
     public static EasyHttpResponse doHttp(EasyHttpRequest request){
