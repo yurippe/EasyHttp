@@ -1,5 +1,6 @@
 import dk.atomit.EasyHTTP.EasyHttp;
 import dk.atomit.EasyHTTP.EasyHttpRequest;
+import dk.atomit.EasyHTTP.EasyHttpResponse;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,9 +11,12 @@ import java.net.URL;
 public class EasyHttpTest {
 
     public static void main(String[] args){
-        URL googlecom = EasyHttp.buildURL("http://google.com");
+        EasyHttp.allowInsecure();
+        URL googlecom = EasyHttp.buildURL("https://admin.yurippe.net");
         EasyHttpRequest request = new EasyHttpRequest(googlecom);
-        System.out.println(request.doHTTP().getResponse());
+        EasyHttpResponse resp = request.doHTTP();
+        System.out.println(resp.getResponse());
+        System.out.println(resp.getFatalException());
 
     }
 }
